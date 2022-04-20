@@ -1,20 +1,20 @@
 package zio.quill
 
 import io.getquill.context.ZioJdbc.DataSourceLayer
-import zio.{ZIO, _}
 import zio.quill.experiment.MagicContext
+import zio.{ZIO, _}
 
 import java.sql.SQLException
-import javax.sql.DataSource
 
 object QuillContext extends MagicContext {}
 
 final case class Account(email: String)
 
-final case class UserService(innerContext: QuillContext.InnerContext) {
+final case class UserService(ctx: QuillContext.InnerContext) {
   import QuillContext._
+
   def allUsers: ZIO[Any, SQLException, List[Account]] =
-    innerContext.run(query[Account])
+    ctx.run(query[Account])
 }
 
 object UserService {

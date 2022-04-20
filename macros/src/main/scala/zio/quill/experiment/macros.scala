@@ -1,19 +1,13 @@
 package zio.quill.experiment
 
 import io.getquill._
-import io.getquill.context.ZioJdbc.DataSourceLayer
-import io.getquill.context.{ActionMacro, QueryMacro}
 import zio._
 
 import java.sql.SQLException
 import javax.sql.DataSource
 import scala.reflect.macros.blackbox
 
-object macros {
-  PostgresZioJdbcContext
-}
-
-abstract class MagicContext extends PostgresZioJdbcContext[SnakeCase](SnakeCase) { self =>
+abstract class MagicContext extends PostgresZioJdbcContext(SnakeCase) { self =>
 
   case class InnerContext(dataSource: DataSource) {
     def run[T](quoted: Quoted[Query[T]]): ZIO[Any, SQLException, List[T]] =
